@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html>
+<head>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<script src="jsonobject.js"></script>
+	<link rel="stylesheet" href="main.css">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<meta charset="utf-8"/>
+
+	<title></title>
+</head>
+<body>
+	<div class="navbar-fixed">
+		<nav>
+			<div class="nav-wrapper pink darken-1">
+				<ul class="left">
+					<li onclick="window.history.back();" class="active"><a title="К списку"><i class="material-icons">keyboard_arrow_left</i></a></li>
+				</ul>
+				<a class="left" style="margin-left: 15px;"><h5 id="recipename"></h5></a>
+				<ul class="right">
+					<li><a href="measures.html" title="Соотношение мер"><i class="material-icons">opacity</i></a></li>
+					<li><a href="temperatures.html" title="Соотношение температур"><i class="material-icons">outdoor_grill</i></a></li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+
+	<div class="row">
+		<div class="col s12 m12">
+			<br/>
+			<div><i id="preptime">Общее время приготовления: </i></div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col s12 m6">
+			<div id="recipetext"></div>
+		</div>
+
+		<div class="col s12 m6">
+			<table class="highlight">
+				<tbody id="ingredients">
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<script>
+		const urlParams = new URLSearchParams(window.location.search);
+		const recipeid = urlParams.get("id");	
+
+		populatePage(recipelist.recipes, recipeid);
+
+		function populatePage(requestData, recipeid) {
+			for (i=0; i<requestData.length; i++) {
+				if (requestData[i].id == recipeid) {
+					var title = document.querySelector('title');
+					var recipetitle = document.createTextNode(requestData[i].name);
+					title.appendChild(recipetitle);
+
+					var header = document.querySelector('#recipename');
+					var recipename = document.createTextNode(requestData[i].name);
+					header.appendChild(recipename);
+
+					var preptime = document.querySelector('#preptime');
+					var recipetime = document.createTextNode(requestData[i].time);
+					preptime.appendChild(recipetime);
+
+					var ingrlist = document.querySelector('#ingredients');
+					for (j=0; j<requestData[i].ingredients.length;j++) {
+						var listitem = document.createElement("tr");
+						var cell = document.createElement("td");
+						var ingr = document.createTextNode(requestData[i].ingredients[j].name);
+						cell.appendChild(ingr);
+						listitem.appendChild(cell);
+						if (requestData[i].ingredients[j].quantity) {
+							cell = document.createElement("td");
+							var quant = document.createTextNode(requestData[i].ingredients[j].quantity);
+							cell.appendChild(quant);
+							listitem.appendChild(cell);
+						}
+						ingrlist.appendChild(listitem);
+					}
+
+					var recipetext = document.querySelector('#recipetext');
+					for (j=0; j<requestData[i].instruction.length;j++) {
+						var step = document.createElement("p");
+						var text = document.createTextNode(requestData[i].instruction[j]);
+						step.appendChild(text);
+						recipetext.appendChild(step);
+					}
+				}
+			}
+		}
+	</script>
+
+</body>
+</html>

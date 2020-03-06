@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html>
+<head>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<meta charset="utf-8"/>
+
+	<title>Соотношение мер</title>
+</head>
+<body>
+	<div class="navbar-fixed">
+		<nav>
+			<div class="nav-wrapper pink darken-1">
+				<ul class="left">
+					<li onclick="window.history.back();" class="active"><a title="Назад"><i class="material-icons">keyboard_arrow_left</i></a></li>
+				</ul>
+				<a class="left" style="margin-left: 15px;"><h5>Соотношение мер</h5></a>
+			</div>
+		</nav>
+	</div>
+
+	<div class="row">
+		<div class="col s12 m12">
+			<table class="highlight" id="measures">
+				<thead>
+					<th> </th>
+					<th>Стакан (250 мл)</th>
+					<th>Столовая ложка (18 мл)</th>
+					<th>Чайная ложка (5 мл)</th>
+				</thead>
+				<tbody>
+					<tr>
+						<td><b>Мука</b></td>
+						<td>160 гр</td>
+						<td>25 гр</td>
+						<td>8 гр</td>
+					</tr>
+					<tr>
+						<td><b>Картофельный крахмал</b></td>
+						<td>180 гр</td>
+						<td>30 гр</td>
+						<td>10 гр</td>
+					</tr>
+					<tr>
+						<td><b>Манная крупа</b></td>
+						<td>200 гр</td>
+						<td>25 гр</td>
+						<td>8 гр</td>
+					</tr>
+					<tr>
+						<td><b>Рис</b></td>
+						<td>230 гр</td>
+						<td>25 гр</td>
+						<td>8 гр</td>
+					</tr>
+					<tr>
+						<td><b>Овсяные хлопья</b></td>
+						<td>90 гр</td>
+						<td>12 гр</td>
+						<td>3 гр</td>
+					</tr>
+					<tr>
+						<td><b>Сахар</b></td>
+						<td>200 гр</td>
+						<td>25 гр</td>
+						<td>8 гр</td>
+					</tr>
+					<tr>
+						<td><b>Желатин (порошок)</b></td>
+						<td>-</td>
+						<td>15 гр</td>
+						<td>5 гр</td>
+					</tr>
+					<tr>
+						<td><b>Какао</b></td>
+						<td>150 гр</td>
+						<td>15 гр</td>
+						<td>9 гр</td>
+					</tr>
+					<tr>
+						<td><b>Вишня, черешня</b></td>
+						<td>190 гр</td>
+						<td>30 гр</td>
+						<td>5 гр</td>
+					</tr>
+					<tr>
+						<td><b>Голубика, черника</b></td>
+						<td>200 гр</td>
+						<td>-</td>
+						<td>-</td>
+					</tr>
+					<tr>
+						<td><b>Клюква</b></td>
+						<td>145 гр</td>
+						<td>-</td>
+						<td>-</td>
+					</tr>
+					<tr>
+						<td><b>Арахис</b></td>
+						<td>175 гр</td>
+						<td>25 гр</td>
+						<td>8 гр</td>
+					</tr>
+					<tr>
+						<td><b>Миндаль</b></td>
+						<td>160 гр</td>
+						<td>30 гр</td>
+						<td>10 гр</td>
+					</tr>
+					<tr>
+						<td><b>Фундук</b></td>
+						<td>170 гр</td>
+						<td>30 гр</td>
+						<td>10 гр</td>
+					</tr>
+					<tr>
+						<td><b>Кедровые орешки</b></td>
+						<td>140 гр</td>
+						<td>10 гр</td>
+						<td>4 гр</td>
+					</tr>
+					<tr>
+						<td><b>Толченые орехи</b></td>
+						<td>120 гр</td>
+						<td>20 гр</td>
+						<td>7 гр</td>
+					</tr>
+					<tr>
+						<td><b>Изюм</b></td>
+						<td>190 гр</td>
+						<td>25 гр</td>
+						<td>7 гр</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<script src="tablefilter/tablefilter.js"></script>
+	<script>
+		var tf = new TableFilter(document.querySelector('#measures'), {
+			base_path: 'tablefilter/',
+			watermark: ['Продукт', '', '', ''],
+			auto_filter: {
+				delay: 100
+			}
+		});
+
+		tf.init();
+	</script>		
+
+</body>
+</html>

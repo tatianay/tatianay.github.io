@@ -1,0 +1,226 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html>
+<head>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<script src="jsonobject.js"></script>
+	<link rel="stylesheet" href="main.css">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<meta charset="utf-8"/>
+
+	<title>Моя кАлинарная книга</title>
+</head>
+<body>
+	<div class="navbar-fixed">
+		<nav>
+			<div class="nav-wrapper pink darken-1">
+				<a class="left" style="margin-left: 15px;"><h5>Рецепты</h5></a>
+				<ul class="right">
+					<li><a id="randomrecipe" onclick="randomrecipe();" title="Случайный рецепт"><i class="material-icons">live_help</i></a></li>
+					<li><a href="measures.html" title="Соотношение мер"><i class="material-icons">opacity</i></a></li>
+					<li><a href="temperatures.html" title="Соотношение температур"><i class="material-icons">outdoor_grill</i></a></li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+
+	<div class="row">
+		<br/>
+	</div>
+
+	<div class="row">
+		<div class="col s12 m4 offset-m8">
+			<a class="waves-effect waves-light btn pink lighten-3" onclick="toggleButton('nosugar');" id='nosugar'>Без сахара</a>
+			<a class="waves-effect waves-light btn pink lighten-3" onclick="toggleButton('nolactose');" id='nolactose'>Без лактозы</a>
+			<a class="waves-effect waves-light btn pink lighten-3" onclick="toggleButton('nogluten');" id='nogluten'>Без глютена</a>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col s12 m12">
+			<table class="highlight" id="cookbookindex">
+				<thead>
+					<tr>
+						<th></th>
+						<th>Название</th>
+						<th>Ингредиенты</th>
+						<th>Категории</th>
+						<th>Проверен</th>
+						<th>Время приготовления</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<button onclick="topFunction()" id="toTopBtn" title="Наверх"><i class="material-icons">keyboard_arrow_up</i></button>
+
+	<script src="tablefilter/tablefilter.js"></script>
+	<script>
+		var nosugar = false;
+		var nolactose = false;
+		var nogluten = false;
+
+		var tf = new TableFilter(document.querySelector('#cookbookindex'), {
+			base_path: 'tablefilter/',
+			col_5: 'none',
+			watermark: ['Фильтр', 'по названию', 'по ингредиентам', 'по категориям', 'проверены', ''],
+			auto_filter: {
+				delay: 100
+			}
+		});
+
+		tf.init();
+
+		fillInTable(recipelist.recipes);
+
+		function fillInTable(requestData) {
+			var tabBody = document.querySelector("#cookbookindex tbody");
+			while (tabBody.firstChild) {
+				tabBody.removeChild(tabBody.firstChild);
+			}
+			for (i=0; i<requestData.length; i++) {
+				var row = document.createElement("tr");
+				var cell = document.createElement("td");
+				var button = document.createElement("a");
+				button.className="btn narrow pink darken-1";
+				button.href="recipe.html?id="+requestData[i].id;
+				button.title="К рецепту";
+				icon = document.createElement("i");
+				icon.className = "material-icons";
+				var textNode = document.createTextNode("keyboard_arrow_right");
+				icon.appendChild(textNode);
+				button.appendChild(icon);
+				cell.appendChild(button);
+				row.appendChild(cell);
+
+				cell = document.createElement("td");
+				var nameNode = document.createTextNode(requestData[i].name);
+				cell.appendChild(nameNode);
+				row.appendChild(cell);
+
+				cell = document.createElement("td");
+				var ingredients = "";
+				var sugar = false;
+				var lactose = false;
+				var gluten = false;
+				for (j=0; j<requestData[i].ingredients.length;j++) {
+					ingredients = ingredients + requestData[i].ingredients[j].name + ", ";
+					if (requestData[i].ingredients[j].name.indexOf('сахар') != -1) {
+						sugar = true;
+					}
+					if (requestData[i].ingredients[j].name.indexOf('молоко') != -1 || requestData[i].ingredients[j].name.indexOf('сыр') != -1 || requestData[i].ingredients[j].name.indexOf('сметана') != -1 ||
+						requestData[i].ingredients[j].name.indexOf('кефир') != -1 || requestData[i].ingredients[j].name.indexOf('сливки') != -1 || requestData[i].ingredients[j].name.indexOf('сливочное масло') != -1 || requestData[i].ingredients[j].name.indexOf('пармезан') != -1 || requestData[i].ingredients[j].name.indexOf('моцарелла') != -1 || requestData[i].ingredients[j].name.indexOf('йогурт') != -1 || requestData[i].ingredients[j].name.indexOf('творог') != -1) {
+						lactose = true;
+					}
+					if ((requestData[i].ingredients[j].name.indexOf('мука') != -1 && requestData[i].ingredients[j].name != 'кукурузная мука') || requestData[i].ingredients[j].name.indexOf('манка') != -1 || requestData[i].ingredients[j].name.indexOf('пиво') != -1 || requestData[i].ingredients[j].name.indexOf('хлеб') != -1 || requestData[i].ingredients[j].name.indexOf('тесто') != -1 || requestData[i].ingredients[j].name.indexOf('багет') != -1 || requestData[i].ingredients[j].name.indexOf('печенье') != -1) {
+						gluten = true;
+					}
+				}
+				ingredients = ingredients.substring(0, ingredients.length - 2);
+				var ingrNode = document.createTextNode(ingredients);
+				cell.appendChild(ingrNode);
+				row.appendChild(cell);
+
+				cell = document.createElement("td");
+				var categories = "";
+				for (j=0; j<requestData[i].category.length;j++) {
+					categories = categories + requestData[i].category[j] + ", ";
+				}
+				categories = categories.substring(0, categories.length - 2);
+				var catNode = document.createTextNode(categories);
+				cell.appendChild(catNode);
+				row.appendChild(cell);
+
+				cell = document.createElement("td");
+				var testNode = document.createTextNode(requestData[i].tested);
+				cell.appendChild(testNode);
+				row.appendChild(cell);
+
+				cell = document.createElement("td");
+				var timeNode = document.createTextNode(requestData[i].time);
+				cell.appendChild(timeNode);
+				row.appendChild(cell);
+
+				if ((!nosugar || (nosugar && !sugar)) && (!nolactose || (nolactose && !lactose)) && (!nogluten || (nogluten && !gluten))) {
+					tabBody.appendChild(row);
+				}
+			}
+		}
+
+		//Scroll to top button
+		var topbutton = document.getElementById("toTopBtn");
+		window.onscroll = function() {scrollFunction()};
+
+		function scrollFunction() {
+		  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+		    topbutton.style.display = "block";
+		  } else {
+		    topbutton.style.display = "none";
+		  }
+		}
+
+		function topFunction() {
+		  document.body.scrollTop = 0;
+		  document.documentElement.scrollTop = 0;
+		}
+
+		function randomrecipe() {
+			const link = document.getElementById('randomrecipe');
+			const recipeid = Math.floor(Math.random() * 492)+1;
+			link.href="recipe.html?id="+recipeid;
+		}
+
+		function toggleButton(condition) {
+			if (condition == 'nosugar') {
+				nosugar = !nosugar;
+				var sugarbutton = document.getElementById('nosugar');
+				if (sugarbutton.classList.contains('lighten-3')) {
+					sugarbutton.classList.remove('lighten-3');
+					sugarbutton.classList.add('darken-3');
+				} else {
+					sugarbutton.classList.add('lighten-3');
+					sugarbutton.classList.remove('darken-3');
+				}
+			}
+			if (condition == 'nolactose') {
+				nolactose = !nolactose;
+				var sugarbutton = document.getElementById('nolactose');
+				if (sugarbutton.classList.contains('lighten-3')) {
+					sugarbutton.classList.remove('lighten-3');
+					sugarbutton.classList.add('darken-3');
+				} else {
+					sugarbutton.classList.add('lighten-3');
+					sugarbutton.classList.remove('darken-3');
+				}
+			}
+			if (condition == 'nogluten') {
+				nogluten = !nogluten;
+				var sugarbutton = document.getElementById('nogluten');
+				if (sugarbutton.classList.contains('lighten-3')) {
+					sugarbutton.classList.remove('lighten-3');
+					sugarbutton.classList.add('darken-3');
+				} else {
+					sugarbutton.classList.add('lighten-3');
+					sugarbutton.classList.remove('darken-3');
+				}
+			}
+			fillInTable(recipelist.recipes);
+		}
+	</script>
+
+</body>
+</html>
